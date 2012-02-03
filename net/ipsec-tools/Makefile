@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2011 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,12 +9,12 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=ipsec-tools
-PKG_VERSION:=0.8.0
-PKG_RELEASE:=2
+PKG_VERSION:=0.7.3
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/ipsec-tools
-PKG_MD5SUM:=b79aae3055a51f8de5c0f1b8ca6cf619
+PKG_MD5SUM:=821bd84e8d4ad5a93bf594b8b3d66e1e
 
 PKG_BUILD_PARALLEL:=1
 PKG_INSTALL:=1
@@ -25,7 +25,7 @@ define Package/ipsec-tools
   SECTION:=net
   CATEGORY:=Network
   SUBMENU:=VPN
-  DEPENDS:=+libopenssl +kmod-ipsec
+  DEPENDS:=@!LINUX_2_4 +libopenssl +kmod-ipsec
   TITLE:=IPsec management tools
   URL:=http://ipsec-tools.sourceforge.net/
 endef
@@ -43,7 +43,6 @@ CONFIGURE_ARGS += \
 	--enable-security-context=no \
 	--enable-natt \
 	--enable-adminport \
-	--enable-frag \
 	 $(call autoconf_bool,CONFIG_IPV6,ipv6)
 
 # override CFLAGS holding "-Werror" that break builds on compile warnings
@@ -73,8 +72,6 @@ define Package/ipsec-tools/install
 	$(SED) 's|@sysconfdir_x@|/etc|g' $(1)/etc/racoon.conf
 	$(INSTALL_DIR) $(1)/etc/racoon
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/src/racoon/samples/psk.txt $(1)/etc/racoon/
-	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) ./files/racoon.init $(1)/etc/init.d/racoon
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libipsec.so.* $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libracoon.so.* $(1)/usr/lib/

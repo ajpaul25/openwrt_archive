@@ -2,22 +2,11 @@
 
 BIRD=/usr/sbin/bird4
 
-$BIRD -p || return 1
+$BIRD -p
 
-. /lib/functions.sh
+( until $BIRD -d "$@"
+do
+	logger error BIRD4 died!
+	sleep 2
+done; ) </dev/null >/dev/null 2> /dev/null &
 
-SERVICE_DAEMONIZE=1
-SERVICE_WRITE_PID=1
-
-sig_handler() {
-	running=0
-	service_stop $BIRD
-}
-
-running=1
-trap sig_handler INT
-trap sig_handler TERM
-while [ $running -gt 0 ]; do
-	service_check $BIRD || service_start $BIRD -d "$@"
-	sleep 3
-done

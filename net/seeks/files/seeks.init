@@ -1,12 +1,21 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2011 OpenWrt.org
-
+# Copyright (C) 2008 OpenWrt.org
 START=99
 
+DAEMON=/usr/bin/seeks
+
 start() {
-	service_start /usr/bin/seeks --daemon
+	echo 'seeks is starting...'
+	start-stop-daemon -S -q -x "$DAEMON" -- --daemon
 }
 
 stop() {
-	service_stop /usr/bin/seeks
+	echo 'seeks is stopping...'
+	start-stop-daemon -K -q -x "$DAEMON"
+}
+
+restart() {
+	stop
+	sleep 2
+	start
 }

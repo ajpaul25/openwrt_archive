@@ -1,21 +1,22 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2010-2011 OpenWrt.org
 
 START=50
 
-SERVICE_DAEMONIZE=1
-SERVICE_WRITE_PID=1
+# Birdloop is used to restart BIRD if it crashed. Unfortunately, it also
+# hides and handles in the same manner start-time errors (like parse error
+# in config file). Therefore, it is not used by default. If you want to
+# use it, comment the first line and uncomment the second line in start().
 
 start() {
-	service_start /usr/sbin/bird4 -d
-#	( SERVICE_MATCH_NAME=1 service_start /usr/sbin/bird4loop )
+	/usr/sbin/bird4
+#	/usr/sbin/bird4loop
 }
 
 stop() {
-#	( SERVICE_MATCH_NAME=1 service_stop /usr/sbin/bird4loop )
-	service_stop /usr/sbin/bird4
+	killall bird4
+	sleep 1
 }
 
 reload() {
-	service_reload /usr/sbin/bird4
+	killall -HUP bird4
 }

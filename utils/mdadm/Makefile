@@ -24,6 +24,7 @@ define Package/mdadm
   CATEGORY:=Utilities
   TITLE:=A tool for managing Soft RAID under Linux
   URL:=http://www.kernel.org/pub/linux/utils/raid/mdadm/
+  DEPENDS:=@!LINUX_2_4
   MAINTAINER:=Luka Perkov <openwrt@lukaperkov.net>
 endef
 

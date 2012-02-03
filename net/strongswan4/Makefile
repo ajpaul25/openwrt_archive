@@ -8,16 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=strongswan
-PKG_VERSION:=4.5.3
+PKG_VERSION:=4.5.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://download.strongswan.org/
-PKG_MD5SUM:=ee7c50a90c91307b111e8085f2479890
+PKG_MD5SUM:=ac33b8f849a274127f84df0838cae953
 
 PKG_MOD_AVAILABLE:= \
 	aes \
-	af-alg \
 	agent \
 	attr \
 	attr-sql \
@@ -112,10 +111,11 @@ $(call Package/strongswan4/Default)
 	+kmod-crypto-authenc \
 	+kmod-ipsec +kmod-ipsec4 \
 	+kmod-ipt-ipsec +iptables-mod-ipsec
+  MENU:=1
 endef
 
 define Package/strongswan4/config
-  source "$(SOURCE)/Config.in"
+	source "$(SOURCE)/Config.in"
 endef
 
 define Package/strongswan4/description
@@ -128,12 +128,11 @@ endef
 define Package/strongswan4-full
 $(call Package/strongswan4/Default)
   TITLE+= (full)
-  DEPENDS:= +strongswan4 \
+  DEPENDS:= strongswan4 \
 	+strongswan4-app-charon \
 	+strongswan4-app-pluto \
 	+strongswan4-libfast \
 	+strongswan4-mod-aes \
-	+strongswan4-mod-af-alg \
 	+strongswan4-mod-agent \
 	+strongswan4-mod-attr \
 	+strongswan4-mod-attr-sql \
@@ -183,8 +182,7 @@ $(call Package/strongswan4/Default)
 	+strongswan4-mod-x509 \
 	+strongswan4-mod-xauth \
 	+strongswan4-mod-xcbc \
-	+strongswan4-utils \
-	@DEVEL
+	+strongswan4-utils
 endef
 
 define Package/strongswan4-full/description
@@ -199,7 +197,7 @@ endef
 define Package/strongswan4-default
 $(call Package/strongswan4/Default)
   TITLE+= (default)
-  DEPENDS:= +strongswan4 \
+  DEPENDS:= strongswan4 \
 	+strongswan4-app-charon \
 	+strongswan4-app-pluto \
 	+strongswan4-mod-aes \
@@ -241,7 +239,7 @@ endef
 define Package/strongswan4-minimal
 $(call Package/strongswan4/Default)
   TITLE+= (minimal)
-  DEPENDS:= +strongswan4 \
+  DEPENDS:= strongswan4 \
 	+strongswan4-app-charon \
 	+strongswan4-mod-aes \
 	+strongswan4-mod-gmp \
@@ -267,7 +265,7 @@ endef
 define Package/strongswan4-app-charon
 $(call Package/strongswan4/Default)
   TITLE+= IKEv2 keying daemon
-  DEPENDS:= +strongswan4
+  DEPENDS:= strongswan4
 endef
 
 define Package/strongswan4-app-charon/description
@@ -280,7 +278,7 @@ endef
 define Package/strongswan4-app-pluto
 $(call Package/strongswan4/Default)
   TITLE+= IKEv1 keying daemon
-  DEPENDS:= +strongswan4
+  DEPENDS:= strongswan4
 endef
 
 define Package/strongswan4-app-pluto/description
@@ -293,7 +291,7 @@ endef
 define Package/strongswan4-libfast
 $(call Package/strongswan4/Default)
   TITLE+= libfast
-  DEPENDS:= +strongswan4
+  DEPENDS:= strongswan4
 endef
 
 define Package/strongswan4-libfast/description
@@ -307,7 +305,7 @@ endef
 define Package/strongswan4-utils
 $(call Package/strongswan4/Default)
   TITLE+= utilities
-  DEPENDS:= +strongswan4
+  DEPENDS:= strongswan4
 endef
 
 define Package/strongswan4-utils/description
@@ -324,7 +322,7 @@ define BuildPlugin
   define Package/strongswan4-mod-$(1)
     $$(call Package/strongswan4/Default)
     TITLE:= StrongSwan $(2) plugin
-    DEPENDS:= +strongswan4 $(3)
+    DEPENDS:= strongswan4 $(3)
   endef
 
   define Package/strongswan4-mod-$(1)/install
@@ -373,8 +371,8 @@ define Package/strongswan4/install
 	$(INSTALL_DIR) $(1)/etc
 	$(CP) -R $(PKG_INSTALL_DIR)/etc/ipsec.d $(1)/etc/
 	$(CP) $(PKG_INSTALL_DIR)/etc/{ipsec.conf,strongswan.conf} $(1)/etc/
-	$(INSTALL_DIR) $(1)/usr/lib/ipsec
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ipsec/{libstrongswan.so.*,libhydra.so.*} $(1)/usr/lib/ipsec/
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/{libstrongswan.so.*,libhydra.so.*} $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/ipsec $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/usr/lib/ipsec
@@ -399,8 +397,8 @@ endef
 
 
 define Package/strongswan4-app-charon/install
-	$(INSTALL_DIR) $(1)/usr/lib/ipsec
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ipsec/libcharon.so.* $(1)/usr/lib/ipsec/
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcharon.so.* $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/lib/ipsec
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ipsec/{charon,stroke} $(1)/usr/lib/ipsec/
 endef
@@ -413,8 +411,8 @@ endef
 
 
 define Package/strongswan4-libfast/install
-	$(INSTALL_DIR) $(1)/usr/lib/ipsec
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ipsec/libfast.so.* $(1)/usr/lib/ipsec/
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libfast.so.* $(1)/usr/lib/
 endef
 
 
@@ -446,7 +444,6 @@ $(eval $(call BuildPackage,strongswan4-utils))
 
 $(eval $(call BuildPlugin,aes,AES crypto,))
 $(eval $(call BuildPlugin,agent,SSH agent signing,))
-$(eval $(call BuildPlugin,af-alg,AF_ALG Linux crypto API,+kmod-crypto-user))
 $(eval $(call BuildPlugin,attr,File-based config attr,))
 $(eval $(call BuildPlugin,attr-sql,SQL-based config attrib,+strongswan4-mod-sql))
 $(eval $(call BuildPlugin,blowfish,Blowfish crypto,))

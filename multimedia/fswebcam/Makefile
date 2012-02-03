@@ -24,7 +24,7 @@ define Package/fswebcam
   CATEGORY:=Multimedia
   TITLE:=fswebcam
   URL:=http://www.sanslogic.co.uk/fswebcam/
-  DEPENDS:=+libgd
+  DEPENDS:= @!LINUX_2_4 +libgd
 endef
 
 define Package/fswebcam/description

@@ -1,15 +1,18 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2006-2011 OpenWrt.org
-
+# Copyright (C) 2006 OpenWrt.org
 START=50
 
-SERVICE_USE_PID=1
+DEFAULT=/etc/default/xinetd
+RUN_D=/var/run
+PID_F=$RUN_D/xinetd.pid
 
 start() {
-	service_start /usr/sbin/xinetd -pidfile /var/run/xinetd.pid
+	[ -f $DEFAULT ] && . $DEFAULT
+	[ -d $RUN_D ] || mkdir -p $RUN_D
+	xinetd $OPTIONS
 }
 
 stop() {
-	service_stop /usr/sbin/xinetd
+	[ -f $PID_F ] && kill $(cat $PID_F)
 }
 

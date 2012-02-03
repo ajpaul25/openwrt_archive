@@ -1,14 +1,19 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2010-2011 OpenWrt.org
+#
 # Copyright (C) 2010 Alfred E. Heggestad
 #
 
 START=92
+BIN=baresip
+DEFAULT=/etc/default/$BIN
+OPTIONS=-d
 
 start() {
-	service_start /usr/bin/baresip -d
+       [ -f $DEFAULT ] && . $DEFAULT
+       $BIN $OPTIONS
 }
 
 stop() {
-	service_stop /usr/bin/baresip
+       killall $BIN
 }
+

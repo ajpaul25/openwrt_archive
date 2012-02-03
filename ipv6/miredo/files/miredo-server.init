@@ -1,14 +1,13 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2006-2011 OpenWrt.org
-
+# Copyright (C) 2006 OpenWrt.org
 START=50
 
-SERVICE_USE_PID=1
+PID_F=/var/run/miredo-server.pid
 
 start() {
-	service_start /usr/sbin/miredo-server
+	miredo-server
 }
 
 stop() {
-	service_stop /usr/sbin/miredo-server
+	[ -f $PID_F ] && kill $(cat $PID_F)
 }

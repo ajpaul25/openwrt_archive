@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2011 OpenWrt.org
+# Copyright (C) 2007 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=psplash
 PKG_VERSION:=0.1
-PKG_RELEASE:=2
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://projects.o-hand.com/sources/psplash/
@@ -27,6 +27,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/psplash
   SECTION:=utils
   CATEGORY:=Utilities
+  DEPENDS:=@!LINUX_2_4
   TITLE:=A boot splash screen
   URL:=http://projects.o-hand.com/psplash
 endef
@@ -48,7 +49,7 @@ define Package/psplash/install
 		$(PKG_INSTALL_DIR)/usr/bin/psplash* \
 		$(1)/bin/
 	$(INSTALL_BIN) \
-		./files/psplash.init \
+		./files/init \
 		$(1)/etc/init.d/psplash
 endef
 

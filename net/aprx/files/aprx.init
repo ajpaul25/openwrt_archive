@@ -1,15 +1,23 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2008-2011 OpenWrt.org
+#Init script for aprx
 
 START=99
+APRX_BIN="/usr/sbin/aprx"
+APRX_LOG_DIR="/var/log/aprx"
 
-SERVICE_USE_PID=1
+system_config() {
+	local cfg="$1"
 
-start() {
-	mkdir -m 0755 -p /var/log/aprx
-	service_start /usr/sbin/aprx
+	config_get hostname "$cfg" hostname
 }
 
+
+start() {
+	[ -x "$APRX_BIN" ] || return 1
+	[ -d "$APRX_LOG_DIR" ] || mkdir -p $APRX_LOG_DIR
+	$APRX_BIN
+	}
+
 stop() {
-	service_stop /usr/sbin/aprx
+	killall aprx
 }

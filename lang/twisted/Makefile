@@ -16,7 +16,7 @@ PKG_SOURCE_URL:=http://tmrc.mit.edu/mirror/twisted/Twisted/2.5
 PKG_MD5SUM:=56df2ae66db57932515a491c03bf514f
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/Twisted-$(PKG_VERSION)
-PKG_BUILD_DEPENDS:=python USE_UCLIBC:librpc
+PKG_BUILD_DEPENDS:=python
 
 include $(INCLUDE_DIR)/package.mk
 $(call include_mk, python-package.mk)

@@ -2,7 +2,6 @@
 config 'mesh' 'bat0'
 	option 'interfaces' 'mesh'
 	option 'aggregated_ogms'
-	option 'ap_isolation'
 	option 'bonding'
 	option 'fragmentation'
 	option 'gw_bandwidth'

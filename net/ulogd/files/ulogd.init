@@ -1,17 +1,16 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2006-2011 OpenWrt.org
-
+# Copyright (C) 2006 OpenWrt.org
 START=50
 
-PROG="ulogd"
-COMMAND="/usr/sbin/$PROG"
-DEFAULT="/etc/default/$PROG"
+BIN=ulogd
+DEFAULT=/etc/default/$BIN
+LOG_D=/var/log
 
 start() {
 	[ -f $DEFAULT ] && . $DEFAULT
-	service_start $COMMAND $OPTIONS
+	$BIN $OPTIONS
 }
 
 stop() {
-	service_stop $COMMAND
+	killall $BIN
 }

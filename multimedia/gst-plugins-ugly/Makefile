@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009-2011 OpenWrt.org
+# Copyright (C) 2009-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,18 +9,13 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gst-plugins-ugly
 PKG_VERSION:=0.10.15
-PKG_RELEASE:=2
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://gstreamer.freedesktop.org/src/gst-plugins-ugly/
 PKG_MD5SUM:=21c034a762a5da252f91640e53bfe457
 
 PKG_BUILD_DEPENDS:= gstreamer gst-plugins-base liboil
-PKG_CONFIG_DEPENDS:= \
-	CONFIG_PACKAGE_gst-mod-asf \
-	CONFIG_PACKAGE_gst-mod-lame \
-	CONFIG_PACKAGE_gst-mod-mad \
-	CONFIG_PACKAGE_gst-mod-mpeg2dec \
 
 PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
@@ -33,6 +28,7 @@ define Package/gstreamer/Default
   SECTION:=multimedia
   TITLE:=GStreamer
   URL:=http://gstreamer.freedesktop.org/
+  DEPENDS:= @!LINUX_2_4
 endef
 
 define Package/gstreamer/description/Default
@@ -54,8 +50,6 @@ $(call Package/gstreamer/description/Default)
 endef
 
 
-GST_COND_SELECT = $(patsubst %,$(if $(CONFIG_PACKAGE_gst-mod-$(1)),--enable,--disable)-%,$(1))
-
 GST_VERSION:=0.10
 
 CONFIGURE_ARGS += \
@@ -65,15 +59,12 @@ CONFIGURE_ARGS += \
 	--disable-a52dec \
 	--disable-amrnb \
 	--disable-amrwb \
-	$(call GST_COND_SELECT,asf) \
 	--disable-cdio \
 	--disable-dvdlpcmdec \
 	--disable-dvdread \
 	--disable-dvdsub \
 	--disable-iec958 \
-	$(call GST_COND_SELECT,lame) \
-	$(call GST_COND_SELECT,mad) \
-	$(call GST_COND_SELECT,mpeg2dec) \
+	--disable-mpeg2dec \
 	--disable-mpegaudioparse \
 	--disable-mpegstream \
 	--disable-realmedia \
@@ -84,6 +75,7 @@ CONFIGURE_ARGS += \
 	\
 	--without-libiconv-prefix \
 	--without-libintl-prefix \
+	--without-x \
 
 EXTRA_LDFLAGS+= \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
@@ -126,9 +118,8 @@ define GstBuildPlugin
   $$(eval $$(call BuildPackage,gst-mod-$(1)))
 endef
 
-$(eval $(call GstBuildPlugin,asf,ASF demuxer,audio riff rtp rtsp sdp tag,,))
 $(eval $(call GstBuildPlugin,lame,MP3 encoder (using LAME),,,+lame-lib))
 $(eval $(call GstBuildPlugin,mad,MP3 decoder (using MAD),audio tag,,+libid3tag +libmad))
-$(eval $(call GstBuildPlugin,mpeg2dec,MPEG decoder,video,,+libmpeg2))
+$(eval $(call GstBuildPlugin,asf,ASF demuxer,,,))
 
 $(eval $(call BuildPackage,gst-plugins-ugly))

@@ -1,5 +1,4 @@
 # 
-# Copyright (C) 2010-2011 OpenWrt.org
 # Copyright (C) 2010 segal.di.ubi.pt 
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -10,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sshtunnel
 PKG_VERSION:=3
-PKG_RELEASE:=3
+PKG_RELEASE:=2
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -36,7 +35,7 @@ endef
 
 define Package/sshtunnel/install
 	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) ./files/sshtunnel.init $(1)/etc/init.d/sshtunnel
+	$(INSTALL_BIN) ./files/initd_sshtunnel $(1)/etc/init.d/sshtunnel
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) ./files/sshtunnel.sh $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/etc/config
